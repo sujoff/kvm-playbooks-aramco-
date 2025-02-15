@@ -1,6 +1,6 @@
 # Ansible Playbook for Cockpit and KVM Installation
 
-This repository contains Ansible playbooks for installing Cockpit with `cockpit-machines` on five Linux hosts. The playbooks ensure the removal of any existing KVM installation before performing a fresh installation of KVM, Cockpit, and Cockpit Machines.
+This repository contains Ansible playbooks for installing Cockpit with `cockpit-machines` on five Linux hosts. The playbooks will perform the removal of any existing KVM installation before performing a fresh installation of KVM, Cockpit, and Cockpit Machines.
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
