@@ -1,0 +1,46 @@
+---
+- name: Change SSH Port and Restart Service
+  hosts: all
+  become: true 
+  vars_files:
+    - sudo_pass.yml
+
+  tasks:
+
+    - name: Change SSH Port in sshd_config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^Port '
+        line: 'Port 677'
+        state: present
+
+    - name: Reload systemd to apply SSH changes
+      command: systemctl daemon-reload
+
+    - name: Restart SSH socket service
+      systemd:
+        name: ssh.socket
+        state: restarted
+        enabled: yes
+
+    - name: Restart SSH service
+      systemd:
+        name: ssh
+        state: restarted
+        enabled: yes
+
+    - name: Allow new SSH port (677) in UFW
+      ufw:
+        rule: allow
+        port: "677"
+        proto: tcp
+
+    - name: Remove old SSH port (22) from UFW
+      ufw:
+        rule: delete
+        port: "22"
+        proto: tcp
+      ignore_errors: yes  # Avoid errors if port 22 isn't in UFW rules
+
+    - name: Reload UFW firewall
+      command: ufw reload

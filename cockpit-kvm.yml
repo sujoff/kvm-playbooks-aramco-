@@ -1,0 +1,58 @@
+---
+- name: Purge old packages and install Libvirt & Cockpit
+  hosts: all
+  become: yes
+  vars_files:
+    - sudo_pass.yml
+  tasks:
+    - name: Purge old packages if they exist
+      ansible.builtin.apt:
+        name:
+          - libvirt-clients
+          - libvirt-daemon-system
+          - libvirt-daemon
+          - virtinst
+          - bridge-utils
+          - qemu-system
+          - qemu-kvm
+        state: absent
+        purge: yes
+        autoremove: yes
+        update_cache: yes
+
+    - name: Install required packages
+      ansible.builtin.apt:
+        name:
+          - libvirt-clients
+          - libvirt-daemon-system
+          - libvirt-daemon
+          - virtinst
+          - bridge-utils
+          - qemu-system
+          - qemu-kvm
+        state: present
+        update_cache: yes
+
+    - name: Enable and start libvirtd service
+      ansible.builtin.systemd:
+        name: libvirtd
+        enabled: yes
+        state: started
+
+    - name: Install Cockpit
+      ansible.builtin.apt:
+        name: cockpit
+        state: present
+        update_cache: yes
+
+    - name: Install Cockpit Machines
+      ansible.builtin.apt:
+        name: cockpit-machines
+        state: present
+        update_cache: yes
+
+    - name: Allow Cockpit port (9090) in UFW
+      ansible.builtin.ufw:
+        rule: allow
+        port: "9090"
+        proto: tcp
