@@ -49,9 +49,10 @@ vars_files:
 ## Deployment
 To execute the playbooks, run:
 ```sh
-ansible-playbook -i /etc/ansible/hosts playbook.yml --ask-vault-pass
+ansible-playbook -i /etc/ansible/hosts sshchangeport.yml --ask-vault-pass #If required, run it.
+ansible-playbook -i /etc/ansible/hosts cockpit-kvm.yml --ask-vault-pass
 ```
-Replace `playbook.yml` with the actual playbook file name.
+Now, you're good to go.
 
 ---
 
