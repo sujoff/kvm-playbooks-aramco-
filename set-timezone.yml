@@ -1,0 +1,17 @@
+---
+- name: Set timezone to Asia/Riyadh
+  hosts: all
+  become: yes
+  tasks:
+    - name: Change timezone to Asia/Riyadh
+      file:
+        src: /usr/share/zoneinfo/Asia/Riyadh
+        dest: /etc/localtime
+        state: link
+        force: yes
+
+    - name: Ensure /etc/timezone file is updated (if applicable)
+      copy:
+        content: "Asia/Riyadh\n"
+        dest: /etc/timezone
+      when: ansible_os_family in ["Debian", "Ubuntu"]
